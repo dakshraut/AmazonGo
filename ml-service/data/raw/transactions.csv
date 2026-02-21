@@ -1,0 +1,10 @@
+transaction_id,user_id,product,rating
+1,101,Bread,1
+1,101,Butter,1
+2,102,Bread,1
+2,102,Milk,1
+3,103,Milk,1
+3,103,Cereal,1
+4,101,Milk,1
+5,102,Butter,1
+6,103,Bread,1
