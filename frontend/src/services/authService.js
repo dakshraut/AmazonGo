@@ -21,13 +21,13 @@ async function request(path, options = {}) {
 
 const authService = {
   login: (email, password) =>
-    request("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
+    request("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
 
   register: (name, email, password) =>
-    request("/api/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) }),
+    request("/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) }),
 
   getCurrentUser: () =>
-    request("/api/auth/me", { method: "GET" }),
+    request("/auth/me", { method: "GET" }),
 
   logout: () => {
     localStorage.removeItem("token");

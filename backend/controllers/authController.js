@@ -13,7 +13,8 @@ export const register = async (req, res) => {
       password: hash
     });
 
-    res.status(201).json({ success: true, user });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    res.status(201).json({ success: true, token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -31,6 +32,15 @@ export const login = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.json({ success: true, token, user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json({ user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

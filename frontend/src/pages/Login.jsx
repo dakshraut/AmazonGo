@@ -14,8 +14,8 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      await login({ username: data.email, password: data.password });
-      navigate("/dashboard");
+      await login({ email: data.email, password: data.password });
+      navigate("/");
     } catch (err) {
       setError(err.message || "Login failed");
     } finally {
