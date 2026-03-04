@@ -15,21 +15,30 @@ const AuthModal = ({ close }) => {
   };
 
   const handleGoogleLogin = async () => {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
 
-    // Optional backend call
-    await fetch("http://localhost:5000/api/auth/google", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      }),
-    });
+      // Backend Google auth call
+      const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001/api";
+      const response = await fetch(`${API_URL}/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+          photo: user.photoURL,
+        }),
+      });
 
-    close();
+      const data = await response.json();
+      if (data.success && data.token) {
+        localStorage.setItem("token", data.token);
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Google login failed:", error);
+    }
   };
 
   return (
