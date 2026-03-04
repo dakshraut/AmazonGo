@@ -1,29 +1,29 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import AuthModal from "./AuthModal";
 import { useAuth } from "../hooks/useAuth";
 
-export default function Navbar(){
+export default function Navbar() {
   const { user, logout } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">
-        <Link to="/" className="logo">AmazonGo</Link>
-      </div>
-      <div className="navbar-nav">
-        <Link to="/cart">Cart</Link>
-        <Link to="/recommendations">AI Recommendations</Link>
-        {user ? (
-          <>
-            <span className="user-name">{user.name}</span>
-            <button className="logout-btn" onClick={logout}>Logout</button>
-          </>
-        ):(
-          <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </>
-        )}
-      </div>
+      <h2>AmazonGo</h2>
+
+      {user ? (
+        <>
+          <span>{user.name}</span>
+          <button onClick={logout}>Logout</button>
+        </>
+      ) : (
+        <button onClick={() => setShowAuth(true)}>
+          Login
+        </button>
+      )}
+
+      {showAuth && (
+        <AuthModal close={() => setShowAuth(false)} />
+      )}
     </nav>
   );
 }
