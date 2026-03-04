@@ -35,7 +35,7 @@ export default function Login() {
             type="email"
             placeholder="Enter your email" 
             value={data.email}
-            onChange={e=>setData({...data,email:e.target.value})}
+            onChange={(e) => setData({ ...data, email: e.target.value })}
             required
           />
         </div>
@@ -46,7 +46,7 @@ export default function Login() {
             type="password"
             placeholder="Enter your password" 
             value={data.password}
-            onChange={e=>setData({...data,password:e.target.value})}
+            onChange={(e) => setData({ ...data, password: e.target.value })}
             required
           />
         </div>

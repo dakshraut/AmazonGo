@@ -1,9 +1,13 @@
 import express from "express";
-import { addToCart, getCart } from "../controllers/cartController.js";
+import { addToCart, getCart, removeFromCart } from "../controllers/cartController.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/add", addToCart);
-router.get("/:userId", getCart);
+router.use(protect); // All cart routes require authentication
+
+router.get("/", getCart);
+router.post("/", addToCart);
+router.delete("/:id", removeFromCart);
 
 export default router;

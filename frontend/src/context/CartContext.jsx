@@ -1,24 +1,49 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import { useAuth } from "../hooks/useAuth";
 import cartService from "../services/cartService";
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const { user, token } = useAuth();
 
   const loadCart = async () => {
-    const data = await cartService.getCart();
-    setCart(data);
+    if (token && user) {
+      try {
+        const data = await cartService.getCart();
+        setCart(data);
+      } catch (error) {
+        console.error("Failed to load cart:", error);
+        setCart([]);
+      }
+    } else {
+      setCart([]);
+    }
   };
 
-  const addToCart = async (item) => {
-    await cartService.add(item);
+  useEffect(() => {
     loadCart();
+  }, [user, token]);
+
+  const addToCart = async (item) => {
+    try {
+      await cartService.add(item);
+      await loadCart();
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+      throw error;
+    }
   };
 
   const removeFromCart = async (id) => {
-    await cartService.remove(id);
-    loadCart();
+    try {
+      await cartService.remove(id);
+      await loadCart();
+    } catch (error) {
+      console.error("Failed to remove from cart:", error);
+      throw error;
+    }
   };
 
   return (
