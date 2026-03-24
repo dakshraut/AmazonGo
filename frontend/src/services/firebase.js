@@ -1,5 +1,14 @@
+// frontend/src/services/firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { 
+  getAuth, 
+  GoogleAuthProvider, 
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCojfSfIm0H7-dgoeBKt2ADb1rx3NBwLX0",
@@ -11,6 +20,52 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
+// Email/Password Sign Up
+export const signUpWithEmail = async (email, password) => {
+  try {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    return { user: result.user, error: null };
+  } catch (error) {
+    return { user: null, error: error.message };
+  }
+};
+
+// Email/Password Sign In
+export const signInWithEmail = async (email, password) => {
+  try {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    return { user: result.user, error: null };
+  } catch (error) {
+    return { user: null, error: error.message };
+  }
+};
+
+// Google Sign In
+export const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return { user: result.user, error: null };
+  } catch (error) {
+    return { user: null, error: error.message };
+  }
+};
+
+// Sign Out
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
+    return { success: true, error: null };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
+// Auth State Observer
+export const onAuthStateChange = (callback) => {
+  return onAuthStateChanged(auth, callback);
+};
+
+export { auth, googleProvider };

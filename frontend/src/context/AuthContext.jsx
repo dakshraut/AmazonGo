@@ -1,77 +1,76 @@
-import { createContext, useState, useEffect } from "react";
-import authService from "../services/authService";
+// frontend/src/context/AuthContext.jsx
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { 
+  signInWithEmail, 
+  signUpWithEmail, 
+  signInWithGoogle, 
+  logoutUser,
+  onAuthStateChange 
+} from '../services/firebase';
 
+// Create and export context
 export const AuthContext = createContext();
 
+// Custom hook
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
+// Provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      if (token) {
-        try {
-          const userData = await authService.getCurrentUser();
-          setUser(userData);
-        } catch (error) {
-          console.error("Auth check failed:", error);
-          setToken(null);
-          localStorage.removeItem("token");
-        }
-      }
+    const unsubscribe = onAuthStateChange((user) => {
+      setUser(user);
       setLoading(false);
-    };
+    });
+    return unsubscribe;
+  }, []);
 
-    checkAuth();
-  }, [token]);
-
-  const login = async (credentials) => {
-    try {
-      const { email, password } = credentials;
-      const response = await authService.login(email, password);
-      const { token: newToken, user: userData } = response;
-      setToken(newToken);
-      setUser(userData);
-      localStorage.setItem("token", newToken);
-      return response;
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
-    }
+  const register = async (email, password) => {
+    setError(null);
+    const result = await signUpWithEmail(email, password);
+    if (result.error) setError(result.error);
+    return result;
   };
 
-  const register = async (credentials) => {
-    try {
-      const { name, email, password } = credentials;
-      const response = await authService.register(name, email, password);
-      if (response.token) {
-        setToken(response.token);
-        setUser(response.user);
-        localStorage.setItem("token", response.token);
-      }
-      return response;
-    } catch (error) {
-      console.error("Registration failed:", error);
-      throw error;
-    }
+  const login = async (email, password) => {
+    setError(null);
+    const result = await signInWithEmail(email, password);
+    if (result.error) setError(result.error);
+    return result;
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("token");
-    authService.logout();
+  const googleSignIn = async () => {
+    setError(null);
+    const result = await signInWithGoogle();
+    if (result.error) setError(result.error);
+    return result;
+  };
+
+  const logout = async () => {
+    setError(null);
+    const result = await logoutUser();
+    if (result.error) setError(result.error);
+    return result;
   };
 
   const value = {
     user,
-    token,
     loading,
-    login,
+    error,
     register,
+    login,
+    googleSignIn,
     logout,
-    isAuthenticated: !!token
+    isAuthenticated: !!user
   };
 
   return (

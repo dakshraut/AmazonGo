@@ -1,75 +1,100 @@
-import { useEffect, useState } from "react";
-import { useCart } from "../hooks/useCart";
+// frontend/src/pages/Cart.jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
-export default function Cart() {
-  const { cart, removeFromCart } = useCart();
-  const [total, setTotal] = useState(0);
+const Cart = () => {
+  const { cartItems, removeFromCart, updateQuantity, cartTotal } = useCart();
 
-  useEffect(() => {
-    const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity || 0), 0);
-    setTotal(cartTotal);
-  }, [cart]);
+  if (cartItems.length === 0) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
+        <p className="text-gray-600 mb-8">Add some products to your cart and they will appear here</p>
+        <Link 
+          to="/products" 
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+        >
+          Continue Shopping
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="main-content">
-      <h1>🛒 Shopping Cart</h1>
-
-      {cart.length === 0 ? (
-        <div style={{textAlign: 'center', padding: '60px 20px'}}>
-          <h2>Your cart is empty</h2>
-          <p style={{color: '#666', marginTop: '10px'}}>Continue shopping to add items</p>
-        </div>
-      ) : (
-        <div className="cart-container">
-          <div className="cart-items">
-            <h2>{cart.length} Items</h2>
-            {cart.map(item=>(
-              <div key={item.productId} className="cart-item">
-                <div className="item-details">
-                  <h4>{item.name}</h4>
-                  <p style={{fontSize: '13px', color: '#666'}}>Quantity: {item.quantity}</p>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
+      
+      <div className="grid md:grid-cols-3 gap-8">
+        {/* Cart Items */}
+        <div className="md:col-span-2">
+          {cartItems.map(item => (
+            <div key={item._id} className="flex items-center border-b py-4">
+              <img 
+                src={item.image} 
+                alt={item.name}
+                className="w-24 h-24 object-cover rounded"
+              />
+              
+              <div className="flex-1 ml-4">
+                <Link to={`/product/${item._id}`} className="font-semibold hover:text-blue-600">
+                  {item.name}
+                </Link>
+                <p className="text-gray-600">${item.price}</p>
+                
+                <div className="flex items-center mt-2">
+                  <select
+                    value={item.quantity}
+                    onChange={(e) => updateQuantity(item._id, parseInt(e.target.value))}
+                    className="border rounded px-2 py-1"
+                  >
+                    {[1,2,3,4,5,6,7,8,9,10].map(num => (
+                      <option key={num} value={num}>{num}</option>
+                    ))}
+                  </select>
+                  
+                  <button
+                    onClick={() => removeFromCart(item._id)}
+                    className="ml-4 text-red-500 hover:text-red-700"
+                  >
+                    Remove
+                  </button>
                 </div>
-                <div className="item-price">${(item.price * item.quantity).toFixed(2)}</div>
-                <button
-                  onClick={()=>removeFromCart(item.productId)}
-                  style={{
-                    background: '#c33',
-                    color: 'white',
-                    padding: '8px 16px',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: '13px'
-                  }}
-                >
-                  Remove
-                </button>
               </div>
-            ))}
+              
+              <div className="text-right">
+                <p className="font-bold">${(item.price * item.quantity).toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Order Summary */}
+        <div className="bg-gray-50 p-6 rounded-lg h-fit">
+          <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>${cartTotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Shipping</span>
+              <span>Free</span>
+            </div>
+            <div className="border-t pt-2 font-bold flex justify-between">
+              <span>Total</span>
+              <span>${cartTotal.toFixed(2)}</span>
+            </div>
           </div>
 
-          <div className="cart-summary">
-            <h3>Order Summary</h3>
-            <div className="summary-row">
-              <span>Subtotal:</span>
-              <span>${total.toFixed(2)}</span>
-            </div>
-            <div className="summary-row">
-              <span>Shipping:</span>
-              <span>$0.00</span>
-            </div>
-            <div className="summary-row">
-              <span>Tax:</span>
-              <span>${(total * 0.1).toFixed(2)}</span>
-            </div>
-            <div className="summary-row total">
-              <span>Total:</span>
-              <span>${(total * 1.1).toFixed(2)}</span>
-            </div>
-            <button className="checkout-btn">Proceed to Checkout</button>
-          </div>
+          <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition">
+            Checkout
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
-}
+};
+
+export default Cart;
