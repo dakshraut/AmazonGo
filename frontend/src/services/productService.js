@@ -20,10 +20,21 @@ export const getProductById = async (id) => {
   }
 };
 
+export const getProductsByCategory = async (category) => {
+  try {
+    const response = await api.get(`/products/category/${category}`);
+    return response.data.data || [];
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    return [];
+  }
+};
+
 const productService = {
   getAll: getProducts,
   getProducts,
   getById: getProductById,
+  getByCategory: getProductsByCategory,
 };
 
 export default productService;

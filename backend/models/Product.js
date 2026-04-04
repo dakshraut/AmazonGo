@@ -6,6 +6,11 @@ const ProductSchema = new mongoose.Schema({
   price: Number,
   image: String,
   tags: [String],
+  stock: {
+    type: Number,
+    default: 50
+  },
+  description: String,
   createdAt: {
     type: Date,
     default: Date.now

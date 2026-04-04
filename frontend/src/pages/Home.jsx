@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
 import { useAuth } from '../hooks/useAuth';
 import ProductCard from '../components/ProductCard';
+import FeaturedProductsSection from '../components/FeaturedProductsSection';
 
 const Home = () => {
-  const { featuredProducts, loading } = useProducts();
+  const { products, featuredProducts, loading } = useProducts();
   const { user } = useAuth();
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -260,7 +261,7 @@ const Home = () => {
             {categories.map((category, index) => (
               <Link
                 key={index}
-                to={`/products?category=${category.name.toLowerCase()}`}
+                to={`/category/${category.name}`}
                 className="group relative overflow-hidden rounded-xl shadow-lg 
                          hover:shadow-2xl transition-all duration-300 transform 
                          hover:-translate-y-2"
@@ -295,43 +296,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Products with Enhanced Cards */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">
-                Featured <span className="text-blue-600">Products</span>
-              </h2>
-              <p className="text-gray-600">Hand-picked just for you</p>
-            </div>
-            <Link
-              to="/products"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold 
-                       hover:bg-blue-700 transition-all transform hover:scale-105 
-                       shadow-lg flex items-center gap-2"
-            >
-              View All <span>→</span>
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-blue-600"></div>
-            </div>
-          ) : featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.map(product => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-gray-50 rounded-lg">
-              <p className="text-gray-500 text-lg">No featured products available</p>
-            </div>
-          )}
-        </div>
-      </section>
+      {/* Featured Products Section - Real Amazon Style */}
+      <FeaturedProductsSection products={products} loading={loading} />
 
       {/* AI Recommendation Banner */}
       <section className="py-12 bg-gradient-to-r from-purple-600 to-blue-600 text-white">

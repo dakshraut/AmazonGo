@@ -100,7 +100,7 @@ const ProductCard = ({ product }) => {
           {/* Product Name */}
           <h3 className="font-semibold text-lg mb-2 line-clamp-1 hover:text-blue-600 
                        transition-colors">
-            {product.name}
+            {product.name || 'Product Name'}
           </h3>
 
           {/* Rating */}
@@ -120,7 +120,7 @@ const ProductCard = ({ product }) => {
           {/* Price Section */}
           <div className="flex items-baseline gap-2 mb-3">
             <span className="text-xl font-bold text-gray-900">
-              ${product.price}
+              ${product.price !== undefined && product.price !== null ? product.price.toFixed(2) : '0.00'}
             </span>
             {product.originalPrice && (
               <>

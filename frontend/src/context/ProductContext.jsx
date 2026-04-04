@@ -37,8 +37,12 @@ export const ProductProvider = ({ children }) => {
       let productsData = [];
       
       if (response.data) {
+        // Check if data.data exists (backend returns { success, count, data: [...] })
+        if (Array.isArray(response.data.data)) {
+          productsData = response.data.data;
+        }
         // Check if data is an array directly
-        if (Array.isArray(response.data)) {
+        else if (Array.isArray(response.data)) {
           productsData = response.data;
         } 
         // Check if data has a products property that's an array
@@ -47,7 +51,10 @@ export const ProductProvider = ({ children }) => {
         }
         // Check if data is an object with numeric keys (like {0: {...}, 1: {...}})
         else if (typeof response.data === 'object' && response.data !== null) {
-          productsData = Object.values(response.data);
+          // Only use Object.values if it doesn't have known properties
+          if (!response.data.success && !response.data.count) {
+            productsData = Object.values(response.data);
+          }
         }
       } 
       // If response itself is an array
@@ -64,7 +71,7 @@ export const ProductProvider = ({ children }) => {
       }
       
       // Filter out any non-object items or items without required fields
-      productsData = productsData.filter(item => item && typeof item === 'object');
+      productsData = productsData.filter(item => item && typeof item === 'object' && item._id);
       
       console.log('Processed products:', productsData);
       setProducts(productsData);
