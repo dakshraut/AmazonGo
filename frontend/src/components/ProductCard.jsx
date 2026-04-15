@@ -1,14 +1,32 @@
 // frontend/src/components/ProductCard.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../hooks/useCart';
 import { useAuth } from '../hooks/useAuth';
+import { triggerWishlistUpdate, saveWishlist, loadWishlist } from '../utils/dashboardHelpers';
+import { getProductImage, categoryImageMap } from '../utils/productImages';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const [isHovered, setIsHovered] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [imgSrc, setImgSrc] = useState('');
+
+  // Set initial image source
+  useEffect(() => {
+    if (product) {
+      setImgSrc(getProductImage(product));
+    }
+  }, [product]);
+
+  // Check if product is in wishlist on mount
+  useEffect(() => {
+    const wishlist = loadWishlist();
+    const inWishlist = wishlist.some(item => item._id === product._id);
+    setIsInWishlist(inWishlist);
+  }, [product._id]);
 
   if (!product) return null;
 
@@ -24,8 +42,42 @@ const ProductCard = ({ product }) => {
     setIsAdding(false);
   };
 
+  const handleWishlistToggle = (e) => {
+    e.preventDefault();
+    if (!user) {
+      window.location.href = '/login';
+      return;
+    }
+
+    const wishlist = loadWishlist();
+    let updatedWishlist;
+    let action;
+
+    if (isInWishlist) {
+      updatedWishlist = wishlist.filter(item => item._id !== product._id);
+      action = 'remove';
+    } else {
+      updatedWishlist = [...wishlist, product];
+      action = 'add';
+    }
+
+    saveWishlist(updatedWishlist);
+    triggerWishlistUpdate(updatedWishlist, action, product);
+    setIsInWishlist(!isInWishlist);
+  };
+
   const discount = product.originalPrice ? 
     Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 0;
+
+  const handleImageError = () => {
+    // Try category fallback first
+    if (product.category && categoryImageMap[product.category]) {
+      setImgSrc(categoryImageMap[product.category]);
+    } else {
+      // Ultimate fallback
+      setImgSrc('https://placehold.co/400x400/cccccc/666?text=📦+Product');
+    }
+  };
 
   return (
     <div
@@ -58,12 +110,11 @@ const ProductCard = ({ product }) => {
         className="absolute top-2 right-2 z-10 bg-white p-2 rounded-full shadow-md 
                    opacity-0 group-hover:opacity-100 transition-opacity duration-300
                    hover:bg-red-50"
-        onClick={(e) => {
-          e.preventDefault();
-          // Add to wishlist functionality
-        }}
+        onClick={handleWishlistToggle}
+        title={isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
       >
-        <svg className="w-5 h-5 text-gray-600 hover:text-red-500" fill="none" 
+        <svg className={`w-5 h-5 transition-colors ${isInWishlist ? 'text-red-500 fill-red-500' : 'text-gray-600 hover:text-red-500'}`} 
+             fill={isInWishlist ? 'currentColor' : 'none'} 
              stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -71,25 +122,15 @@ const ProductCard = ({ product }) => {
       </button>
 
       <Link to={`/product/${product._id}`} className="block">
-        {/* Image Container */}
-        <div className="relative h-48 overflow-hidden bg-gray-100">
+        {/* Product Image - IMPROVED */}
+        <div className="w-full h-48 bg-gray-100 overflow-hidden rounded-t-xl">
           <img
-            src={product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'}
+            src={imgSrc}
             alt={product.name}
-            className={`w-full h-full object-contain p-4 transition-all duration-500 
-                       ${isHovered ? 'scale-110' : 'scale-100'}`}
+            className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+            onError={handleImageError}
           />
-          
-          {/* Quick View Overlay */}
-          <div className={`absolute inset-0 bg-black bg-opacity-20 flex items-center 
-                          justify-center transition-opacity duration-300 
-                          ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <span className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold 
-                           transform -translate-y-2 group-hover:translate-y-0 
-                           transition-transform duration-300 shadow-lg">
-              Quick View
-            </span>
-          </div>
         </div>
 
         {/* Product Details */}

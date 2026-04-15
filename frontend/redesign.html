@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmazonGo - Shop Smart, Shop Fast</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF9900;
+            --secondary: #146EB4;
+            --dark-bg: #232F3E;
+            --light-bg: #F5F5F5;
+            --text-dark: #111;
+            --text-light: #666;
+            --border: #E0E0E0;
+            --success: #28a745;
+            --warning: #ff7600;
+            --danger: #dc3545;
+            --rating-color: #FFB81C;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            background: var(--dark-bg);
+            color: white;
+            padding: 8px 0;
+            font-size: 0.875rem;
+        }
+
+        .header-top-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-top-left, .header-top-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-main {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 150px 1fr 200px;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Search Bar */
+        .search-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(20, 110, 180, 0.1);
+        }
+
+        .search-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #E58F00;
+        }
+
+        /* Header Icons */
+        .header-icons {
+            display: flex;
+            gap: 24px;
+            justify-content: flex-end;
+        }
+
+        .icon-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .icon-link:hover {
+            color: var(--primary);
+        }
+
+        .icon {
+            font-size: 1.8rem;
+        }
+
+        .icon-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            background: var(--dark-bg);
+            color: white;
+            padding: 12px 0;
+        }
+
+        .nav-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            font-weight: 900;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 32px;
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--text-dark);
+        }
+
+        .btn-primary:hover {
+            background: #E58F00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-bg);
+            transform: translateY(-2px);
+        }
+
+        /* ===== PROMO BANNERS ===== */
+        .promo-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .promo-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .promo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .promo-icon {
+            font-size: 2.5rem;
+        }
+
+        .promo-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .promo-content p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* ===== DEALS SECTION ===== */
+        .section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+        }
+
+        .section-header a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .section-header a:hover {
+            color: var(--primary);
+        }
+
+        /* ===== PRODUCT GRID ===== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        /* Responsive Grid */
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ===== PRODUCT CARD ===== */
+        .product-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .product-image-wrapper {
+            width: 100%;
+            aspect-ratio: 1;
+            background: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--danger);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .product-info {
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .product-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: var(--rating-color);
+            font-size: 0.85rem;
+        }
+
+        .star.empty {
+            color: var(--border);
+        }
+
+        .rating-text {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--danger);
+            margin-bottom: 4px;
+        }
+
+        .product-original-price {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-bottom: 12px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            background: var(--primary);
+            color: var(--text-dark);
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #E58F00;
+        }
+
+        .wishlist-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .wishlist-btn:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* ===== CATEGORY GRID ===== */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, hsl(200, 100%, 45%) 0%, hsl(200, 100%, 35%) 100%);
+            color: white;
+            padding: 24px 16px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .category-card:nth-child(1) { background: linear-gradient(135deg, #0066FF 0%, #0047B2 100%); }
+        .category-card:nth-child(2) { background: linear-gradient(135deg, #9D00FF 0%, #6B00B2 100%); }
+        .category-card:nth-child(3) { background: linear-gradient(135deg, #00B050 0%, #006B38 100%); }
+        .category-card:nth-child(4) { background: linear-gradient(135deg, #FF4444 0%, #B20000 100%); }
+        .category-card:nth-child(5) { background: linear-gradient(135deg, #FFB800 0%, #B28600 100%); }
+        .category-card:nth-child(6) { background: linear-gradient(135deg, #FF0080 0%, #B20060 100%); }
+
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+        }
+
+        .category-icon {
+            font-size: 2.2rem;
+        }
+
+        /* ===== FEATURED BANNER ===== */
+        .featured-banner {
+            background: linear-gradient(135deg, var(--secondary) 0%, #0D3D7A 100%);
+            color: white;
+            padding: 40px 20px;
+            margin: 40px 0;
+            border-radius: 8px;
+        }
+
+        .featured-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .featured-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .featured-content h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            font-weight: 900;
+        }
+
+        .featured-content p {
+            font-size: 1rem;
+            margin-bottom: 24px;
+            opacity: 0.95;
+            line-height: 1.8;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-info h3 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .testimonial-info p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .testimonial-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 40px 20px 20px;
+        }
+
+        .footer-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-column h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--primary);
+        }
+
+        /* ===== ACCESSIBILITY ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            header, .nav-bar, .hero-buttons, .product-actions, footer {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <!-- Top Bar -->
+        <div class="header-top">
+            <div class="header-top-wrapper">
+                <div class="header-top-left">
+                    <span>🌍 Deliver to United States</span>
+                </div>
+                <div class="header-top-right">
+                    <span>Sign In</span>
+                    <span>Your Orders</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Header -->
+        <div class="header-main">
+            <div class="header-wrapper">
+                <div class="logo">
+                    <div class="logo-icon">A</div>
+                    <span>AmazonGo</span>
+                </div>
+
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" placeholder="Search products...">
+                    <button class="search-btn">🔍 Search</button>
+                </div>
+
+                <div class="header-icons">
+                    <a href="#" class="icon-link">
+                        <span class="icon">❤️</span>
+                        <span class="icon-label">Wishlist</span>
+                    </a>
+                    <a href="#" class="icon-link">
+                        <span class="icon">👤</span>
+                        <span class="icon-label">Account</span>
+                    </a>
+                    <a href="#" class="icon-link">
+                        <span class="icon">🛒</span>
+                        <span class="icon-label">Cart</span>
+                        <div class="cart-badge">3</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="nav-bar">
+            <div class="nav-wrapper">
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#">Best Sellers</a></li>
+                    <li><a href="#">Today's Deals</a></li>
+                    <li><a href="#">Electronics</a></li>
+                    <li><a href="#">Books</a></li>
+                    <li><a href="#">Help & Customer Service</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-wrapper">
+            <h1>🎉 Welcome to AmazonGo</h1>
+            <p>Experience the future of shopping - fast delivery, great prices, AI-powered recommendations</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary">Shop Now</button>
+                <button class="btn btn-secondary">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROMO BANNERS -->
+    <section class="promo-section">
+        <a href="#" class="promo-card">
+            <div class="promo-icon">🚚</div>
+            <div class="promo-content">
+                <h3>Free Delivery</h3>
+                <p>On orders above $25</p>
+            </div>
+        </a>
+        <a href="#" class="promo-card">
+            <div class="promo-icon">💰</div>
+            <div class="promo-content">
+                <h3>Money Back</h3>
+                <p>100% satisfaction guarantee</p>
+            </div>
+        </a>
+        <a href="#" class="promo-card">
+            <div class="promo-icon">🔒</div>
+            <div class="promo-content">
+                <h3>Secure Payment</h3>
+                <p>Protected transactions</p>
+            </div>
+        </a>
+        <a href="#" class="promo-card">
+            <div class="promo-icon">⚡</div>
+            <div class="promo-content">
+                <h3>AI Recommendations</h3>
+                <p>Smart shopping experience</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- TODAY'S DEALS SECTION -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🔥 Today's Deals</h2>
+            <a href="#">See all deals →</a>
+        </div>
+
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23f0f0f0' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EWireless Headphones%3C/text%3E%3C/svg%3E" alt="Wireless Headphones" class="product-image">
+                    <span class="product-badge">-35%</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">Premium Wireless Bluetooth Headphones</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(1,234 reviews)</span>
+                    </div>
+                    <div class="product-price">$64.99</div>
+                    <div class="product-original-price">$99.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23fff0e6' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3ECharging Pad%3C/text%3E%3C/svg%3E" alt="Wireless Charging Pad" class="product-image">
+                    <span class="product-badge">-20%</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">Wireless Charging Pad</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span class="rating-text">(856 reviews)</span>
+                    </div>
+                    <div class="product-price">$29.99</div>
+                    <div class="product-original-price">$39.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23e6f0ff' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3ESmart Watch%3C/text%3E%3C/svg%3E" alt="Smart Fitness Watch" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">Smart Fitness Watch</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(2,102 reviews)</span>
+                    </div>
+                    <div class="product-price">$199.99</div>
+                    <div class="product-original-price">$299.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23f0f0f0' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EUSB Cable%3C/text%3E%3C/svg%3E" alt="USB Type-C Cable" class="product-image">
+                    <span class="product-badge">-40%</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Accessories</span>
+                    <h3 class="product-name">USB Type-C Fast Charging Cable</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span class="rating-text">(512 reviews)</span>
+                    </div>
+                    <div class="product-price">$14.99</div>
+                    <div class="product-original-price">$24.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23fff5f0' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3ESpeaker%3C/text%3E%3C/svg%3E" alt="Bluetooth Speaker" class="product-image">
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">Portable Bluetooth Speaker</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(1,876 reviews)</span>
+                    </div>
+                    <div class="product-price">$49.99</div>
+                    <div class="product-original-price">$79.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23e6f0ff' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EPower Bank%3C/text%3E%3C/svg%3E" alt="Portable Power Bank" class="product-image">
+                    <span class="product-badge">-25%</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">20000mAh Portable Power Bank</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(3,421 reviews)</span>
+                    </div>
+                    <div class="product-price">$34.99</div>
+                    <div class="product-original-price">$49.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES SECTION -->
+    <section class="section">
+        <div class="section-header">
+            <h2>🏪 Shop by Category</h2>
+        </div>
+
+        <div class="category-grid">
+            <a href="#" class="category-card">
+                <span class="category-icon">💻</span>
+                <span>Electronics</span>
+            </a>
+            <a href="#" class="category-card">
+                <span class="category-icon">👗</span>
+                <span>Fashion</span>
+            </a>
+            <a href="#" class="category-card">
+                <span class="category-icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="#" class="category-card">
+                <span class="category-icon">⚽</span>
+                <span>Sports</span>
+            </a>
+            <a href="#" class="category-card">
+                <span class="category-icon">📚</span>
+                <span>Books</span>
+            </a>
+            <a href="#" class="category-card">
+                <span class="category-icon">💄</span>
+                <span>Beauty</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- BEST SELLERS SECTION -->
+    <section class="section">
+        <div class="section-header">
+            <h2>⭐ Best Sellers</h2>
+            <a href="#">View all best sellers →</a>
+        </div>
+
+        <div class="product-grid">
+            <!-- Best Seller 1 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23fff0e6' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EHeadphones%3C/text%3E%3C/svg%3E" alt="Best Seller Headphones" class="product-image">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">Ultra Premium Wireless Headphones</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(5,234 reviews)</span>
+                    </div>
+                    <div class="product-price">$89.99</div>
+                    <div class="product-original-price">$129.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Seller 2 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23f0f0f0' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EKeyboard%3C/text%3E%3C/svg%3E" alt="Mechanical Keyboard" class="product-image">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">Mechanical Gaming Keyboard RGB</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(4,123 reviews)</span>
+                    </div>
+                    <div class="product-price">$129.99</div>
+                    <div class="product-original-price">$179.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Seller 3 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23e6f0ff' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EMouse%3C/text%3E%3C/svg%3E" alt="Wireless Mouse" class="product-image">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">Precision Wireless Mouse</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(3,876 reviews)</span>
+                    </div>
+                    <div class="product-price">$39.99</div>
+                    <div class="product-original-price">$59.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Seller 4 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23f5f0e6' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EMonitor%3C/text%3E%3C/svg%3E" alt="4K Monitor" class="product-image">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">27&quot; 4K Ultra HD Monitor</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(2,312 reviews)</span>
+                    </div>
+                    <div class="product-price">$349.99</div>
+                    <div class="product-original-price">$499.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Seller 5 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23f0f5ff' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EWebcam%3C/text%3E%3C/svg%3E" alt="HD Webcam" class="product-image">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">1080p HD Streaming Webcam</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(1,945 reviews)</span>
+                    </div>
+                    <div class="product-price">$79.99</div>
+                    <div class="product-original-price">$119.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Seller 6 -->
+            <div class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23ffe6f0' width='200' height='200'/%3E%3Ctext x='50%' y='50%' font-size='16' text-anchor='middle' dy='.3em' fill='%23999'%3EHeadset%3C/text%3E%3C/svg%3E" alt="Gaming Headset" class="product-image">
+                    <span class="product-badge">Bestseller</span>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">Electronics</span>
+                    <h3 class="product-name">RGB Gaming Headset with Mic</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">(2,567 reviews)</span>
+                    </div>
+                    <div class="product-price">$59.99</div>
+                    <div class="product-original-price">$89.99</div>
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">♡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI RECOMMENDATIONS BANNER -->
+    <section class="section">
+        <div class="featured-banner">
+            <div class="featured-wrapper">
+                <div class="featured-content">
+                    <h2>🤖 AI-Powered Recommendations</h2>
+                    <p>Our advanced machine learning algorithms analyze your shopping preferences and browsing history to recommend products you'll love. Discover new favorites personalized just for you.</p>
+                    <button class="btn btn-primary">Get Recommendations</button>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 40px; text-align: center;">
+                    <span style="font-size: 4rem;">🎯</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="section">
+        <div class="section-header">
+            <h2>💬 What Our Customers Say</h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">SJ</div>
+                    <div class="testimonial-info">
+                        <h3>Sarah Johnson</h3>
+                        <p>2 weeks ago</p>
+                    </div>
+                </div>
+                <div class="product-rating" style="margin-bottom: 12px;">
+                    <div class="stars">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                </div>
+                <p class="testimonial-text">
+                    "The fastest delivery I've ever experienced! The product arrived in perfect condition and the quality exceeded my expectations. Highly recommended!"
+                </p>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">MC</div>
+                    <div class="testimonial-info">
+                        <h3>Michael Chen</h3>
+                        <p>1 week ago</p>
+                    </div>
+                </div>
+                <div class="product-rating" style="margin-bottom: 12px;">
+                    <div class="stars">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                </div>
+                <p class="testimonial-text">
+                    "Great shopping experience. The recommendations were spot-on for what I needed. Their customer service is top-notch and always helpful."
+                </p>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">PP</div>
+                    <div class="testimonial-info">
+                        <h3>Priya Patel</h3>
+                        <p>5 days ago</p>
+                    </div>
+                </div>
+                <div class="product-rating" style="margin-bottom: 12px;">
+                    <div class="stars">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                </div>
+                <p class="testimonial-text">
+                    "I've delivered and amazing products. The prices are competitive and the selection is huge. I can't imagine shopping anywhere else now!"
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIEW ALL PRODUCTS BUTTON -->
+    <section class="section" style="text-align: center; padding: 60px 20px;">
+        <button class="btn btn-secondary" style="background: var(--primary); color: white; padding: 16px 48px; font-size: 1.1rem;">🛍️ Shop All Products</button>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-wrapper">
+            <!-- Footer Grid -->
+            <div class="footer-grid">
+                <!-- Column 1: About -->
+                <div class="footer-column">
+                    <h3>About AmazonGo</h3>
+                    <ul>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Releases</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Investor Relations</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Help & Support -->
+                <div class="footer-column">
+                    <h3>Customer Service</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Policies -->
+                <div class="footer-column">
+                    <h3>Policies</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                        <li><a href="#">Cookie Settings</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Connect -->
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 5: Download App -->
+                <div class="footer-column">
+                    <h3>Download App</h3>
+                    <ul>
+                        <li><a href="#">iOS App</a></li>
+                        <li><a href="#">Android App</a></li>
+                        <li><a href="#">Desktop App</a></li>
+                        <li><a href="#">App Features</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-logo">AmazonGo</div>
+                <ul class="footer-bottom-links">
+                    <li><a href="#">© 2026 AmazonGo Inc.</a></li>
+                    <li><a href="#">All rights reserved</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Product added to cart!');
+                const badge = document.querySelector('.cart-badge');
+                badge.textContent = parseInt(badge.textContent) + 1;
+            });
+        });
+
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.style.color = this.style.color === 'red' ? 'black' : 'red';
+                this.textContent = this.style.color === 'red' ? '❤️' : '♡';
+            });
+        });
+
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const searchInput = document.querySelector('.search-input');
+            const query = searchInput.value;
+            if (query.trim()) {
+                alert(`Searching for: ${query}`);
+            }
+        });
+    </script>
+</body>
+</html>

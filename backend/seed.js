@@ -30,7 +30,7 @@ const seedData = async () => {
         name: "Wireless Bluetooth Headphones",
         category: "Electronics",
         price: 99.99,
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
+        image: "https://m.media-amazon.com/images/I/51gU5cDndhL._SL1500_.jpg",
         tags: ["audio", "wireless", "bluetooth"]
       },
       {

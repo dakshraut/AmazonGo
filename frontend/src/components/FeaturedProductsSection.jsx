@@ -1,8 +1,14 @@
 // frontend/src/components/FeaturedProductsSection.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getProductImage } from '../utils/productImages';
 
 const FeaturedProductsSection = ({ products, loading }) => {
+  const [imageErrors, setImageErrors] = useState({});
+
+  const handleImageError = (id) => {
+    setImageErrors(prev => ({ ...prev, [id]: true }));
+  };
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96 bg-gray-50">
@@ -39,26 +45,26 @@ const FeaturedProductsSection = ({ products, loading }) => {
           {/* Large Featured Item - Left Side */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow h-full flex flex-col">
-              <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 h-72 flex items-center justify-center overflow-hidden">
+              <div className="w-full h-72 overflow-hidden rounded-t-xl bg-white flex items-center justify-center">
                 {products[0] && (
-                  <>
+                  !imageErrors[products[0]._id] ? (
                     <img
-                      src={products[0].image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'}
+                      src={getProductImage(products[0])}
                       alt={products[0].name || 'Featured Product'}
-                      className="w-full h-full object-contain p-6 hover:scale-105 transition-transform"
+                      className="w-full h-72 object-cover hover:scale-105 transition-transform"
+                      onError={() => handleImageError(products[0]._id)}
                     />
-                    <div className="absolute top-4 left-4 bg-red-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
-                      🔥 Trending
-                    </div>
-                  </>
+                  ) : (
+                    <div className="text-6xl text-gray-300">📦</div>
+                  )
                 )}
               </div>
               <div className="p-5 flex-grow flex flex-col justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-gray-500 mb-2 font-semibold">
+                  <p className="text-xs uppercase tracking-wider mb-2 font-semibold text-gray-600">
                     {products[0]?.category || 'Products'}
                   </p>
-                  <h3 className="font-bold text-lg mb-2 text-gray-900 line-clamp-2">
+                  <h3 className="font-bold text-lg mb-2 line-clamp-2 text-gray-900">
                     {products[0]?.name || 'Product'}
                   </h3>
                 </div>
@@ -73,7 +79,7 @@ const FeaturedProductsSection = ({ products, loading }) => {
                       </span>
                     )}
                   </div>
-                  <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg transition-all transform hover:scale-105 shadow-md">
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-all transform hover:scale-105 shadow-md">
                     🛒 Add to Cart
                   </button>
                 </div>
@@ -88,30 +94,32 @@ const FeaturedProductsSection = ({ products, loading }) => {
                 key={product._id || index}
                 className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full"
               >
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 h-48 flex items-center justify-center relative overflow-hidden">
+              <div className="w-full h-48 overflow-hidden rounded-t-xl bg-white flex items-center justify-center">
+                {!imageErrors[product._id] ? (
                   <img
-                    src={product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300'}
+                    src={getProductImage(product)}
                     alt={product.name || 'Product'}
-                    className="w-full h-full object-contain p-4 hover:scale-110 transition-transform"
+                    className="w-full h-48 object-cover hover:scale-110 transition-transform"
+                    onError={() => handleImageError(product._id)}
                   />
-                  <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                    ✓ {product.stock || 0} left
-                  </div>
-                </div>
-                <div className="p-4 flex-grow flex flex-col justify-between">
+                ) : (
+                  <div className="text-5xl text-gray-300">📦</div>
+                )}
+              </div>
+              <div className="p-4 flex-grow flex flex-col justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-gray-500 mb-1 font-semibold">
+                    <p className="text-xs uppercase tracking-wider mb-1 font-semibold text-gray-600">
                       {product.category || 'Products'}
                     </p>
-                    <h4 className="font-semibold text-base mb-2 text-gray-900 line-clamp-2">
+                    <h4 className="font-semibold text-base mb-2 line-clamp-2 text-gray-900">
                       {product.name || 'Product'}
                     </h4>
                   </div>
                   <div>
-                    <p className="text-xl font-bold text-gray-900 mb-3">
+                    <p className="text-xl font-bold mb-3 text-gray-900">
                       ${(product.price || 0).toFixed(2)}
                     </p>
-                    <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2 rounded-lg transition-all text-sm">
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-all text-sm">
                       Add to Cart
                     </button>
                   </div>
@@ -122,7 +130,7 @@ const FeaturedProductsSection = ({ products, loading }) => {
         </div>
 
         {/* Special Deals Banner */}
-        <div className="mb-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-8 text-white shadow-lg hover:shadow-xl transition-shadow">
+        <div className="mb-10 rounded-xl p-8 text-white shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-r from-blue-600 to-blue-700">
           <h3 className="text-2xl font-bold mb-2">⚡ Today's Deals</h3>
           <p className="text-base opacity-90">Limited time offers on selected items</p>
         </div>
@@ -138,30 +146,25 @@ const FeaturedProductsSection = ({ products, loading }) => {
               <Link
                 key={product._id || product.id}
                 to={`/product/${product._id}`}
-                className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-2"
+                className="group rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all hover:-translate-y-2" style={{ backgroundColor: '#FFFFFF' }}
               >
-                <div className="h-40 bg-gray-100 flex items-center justify-center relative overflow-hidden">
-                  <img
-                    src={product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200'}
-                    alt={product.name || 'Product'}
-                    className="w-full h-full object-contain p-3 group-hover:scale-110 transition-transform"
-                  />
-                  {product.stock <= 10 && product.stock > 0 && (
-                    <div className="absolute top-2 right-2 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md">
-                      {product.stock} left
-                    </div>
-                  )}
-                  {product.stock === 0 && (
-                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">Out of Stock</span>
-                    </div>
+                <div className="h-40 overflow-hidden rounded-t-xl bg-white flex items-center justify-center">
+                  {!imageErrors[product._id] ? (
+                    <img
+                      src={getProductImage(product)}
+                      alt={product.name || 'Product'}
+                      className="w-full h-40 object-cover group-hover:scale-110 transition-transform"
+                      onError={() => handleImageError(product._id)}
+                    />
+                  ) : (
+                    <div className="text-4xl text-gray-300">📦</div>
                   )}
                 </div>
                 <div className="p-3">
                   <h4 className="text-xs font-semibold line-clamp-2 mb-2 text-gray-900">
                     {product.name || 'Product'}
                   </h4>
-                  <p className="text-base font-bold text-gray-900 mb-2">
+                  <p className="text-base font-bold mb-2 text-gray-900">
                     ${(product.price || 0).toFixed(2)}
                   </p>
                   <div className="flex gap-0.5 mb-3">
@@ -170,7 +173,7 @@ const FeaturedProductsSection = ({ products, loading }) => {
                     ))}
                     <span className="text-xs text-gray-500 ml-1">(28)</span>
                   </div>
-                  <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-xs font-bold py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity transform">
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity transform">
                     Add Now
                   </button>
                 </div>
@@ -183,7 +186,7 @@ const FeaturedProductsSection = ({ products, loading }) => {
         <div className="text-center py-10">
           <Link
             to="/products"
-            className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-lg font-bold hover:shadow-xl transition-all transform hover:scale-105 text-lg"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-lg font-bold hover:shadow-xl transition-all transform hover:scale-105 text-lg"
           >
             👉 Shop All Products
           </Link>

@@ -1,6 +1,5 @@
 // frontend/src/context/CartContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
 
 // Create and export context
 export const CartContext = createContext();
@@ -15,7 +14,6 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +21,12 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
+        setCartItems([]);
+      }
     }
   }, []);
 

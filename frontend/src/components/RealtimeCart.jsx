@@ -2,15 +2,15 @@ import React from "react";
 import { useCart } from "../hooks/useCart";
 
 const RealtimeCart = () => {
-  const { cart, removeFromCart } = useCart();
+  const { cartItems, removeFromCart } = useCart();
 
   return (
     <div className="realtime-cart">
       <h3>Live Cart</h3>
 
-      {cart.length === 0 && <p>Cart is empty</p>}
+      {cartItems.length === 0 && <p>Cart is empty</p>}
 
-      {cart.map((item) => (
+      {cartItems.map((item) => (
         <div key={item._id} className="cart-item">
           <span>{item.name}</span>
           <span>₹{item.price}</span>

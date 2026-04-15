@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const RecommendationSchema = new mongoose.Schema({
-  userId: mongoose.Schema.Types.ObjectId,
+  userId: {
+    type: String,
+    required: false
+  },
   items: Array,
   source: String,
   cartItems: Array,

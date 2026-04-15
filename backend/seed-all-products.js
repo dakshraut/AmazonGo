@@ -20,7 +20,7 @@ const seedProducts = async () => {
         category: "Electronics",
         price: 29.99,
         stock: 45,
-        image: "https://images.unsplash.com/photo-1591290621749-33d995b913cc?w=300&h=300&fit=crop",
+        image: "https://m.media-amazon.com/images/I/51gU5cDndhL._SL1500_.jpg",
         tags: ["charging", "wireless", "accessories"]
       },
       {

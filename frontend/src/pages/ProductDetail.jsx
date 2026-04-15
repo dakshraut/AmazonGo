@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../hooks/useCart';
 import { useAuth } from '../hooks/useAuth';
+import { getProductImage } from '../utils/productImages';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ const ProductDetail = () => {
   const { user } = useAuth();
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const product = getProductById(id);
 
@@ -33,14 +35,19 @@ const ProductDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-1 gap-8">
         {/* Product Image */}
-        <div className="bg-white rounded-lg p-8 flex items-center justify-center">
-          <img 
-            src={product.image} 
-            alt={product.name}
-            className="max-w-full h-auto max-h-96 object-contain"
-          />
+        <div className="bg-white rounded-lg p-8 flex items-center justify-center min-h-80">
+          {!imageError ? (
+            <img 
+              src={getProductImage(product)}
+              alt={product.name}
+              className="max-w-full h-auto max-h-96 object-cover"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="text-6xl text-gray-300">📦</div>
+          )}
         </div>
 
         {/* Product Details */}
